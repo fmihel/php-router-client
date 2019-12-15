@@ -1,0 +1,39 @@
+{
+  "name": "fmihel-php-router",
+  "version": "0.0.1",
+  "description": "client side for php-router",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fmihel/php-router-js.git"
+  },
+  "keywords": [
+    "js",
+    "php",
+    "router"
+  ],
+  "author": "fmihel76@gmail.com",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/fmihel/php-router-js/issues"
+  },
+  "homepage": "https://github.com/fmihel/php-router-js#readme",
+  "devDependencies": {
+    "@babel/core": "^7.6.2",
+    "@babel/preset-env": "^7.6.2",
+    "@babel/preset-react": "^7.0.0",
+    "babel-eslint": "^10.0.3",
+    "babel-loader": "^8.0.6",
+    "eslint": "^6.4.0",
+    "eslint-config-airbnb": "^18.0.1",
+    "eslint-import-resolver-webpack": "^0.11.1",
+    "eslint-plugin-import": "^2.18.2",
+    "eslint-plugin-react": "^7.14.3"
+  },
+  "dependencies": {
+    "jquery": "^3.4.1"
+  }
+}
