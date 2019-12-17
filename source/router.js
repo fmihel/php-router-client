@@ -26,16 +26,14 @@ class Router {
                     const errorMsg = { res: 0, msg: 'system', data: null };
                     try {
                         const data = $.parseJSON(d);
-
                         if (('pack' in data) && (typeof (data.pack) === 'object') && ('res' in data.pack)) {
-                            // eslint-disable-next-line eqeqeq
+                        // eslint-disable-next-line eqeqeq
                             if (data.pack.res == '1') {
                                 ok(data.pack.data);
                             } else {
                                 errorMsg.res = data.pack.res;
                                 errorMsg.msg = data.pack.msg;
                                 errorMsg.data = data.pack.data;
-
                                 err(errorMsg);
                             }
                         } else {
