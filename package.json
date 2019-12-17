@@ -1,5 +1,5 @@
 {
-  "name": "fmihel-php-router",
+  "name": "fmihel-php-router-client",
   "version": "0.0.1",
   "description": "client side for php-router",
   "main": "index.js",
@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/fmihel/php-router-js.git"
+    "url": "git+https://github.com/fmihel/php-router-client.git"
   },
   "keywords": [
     "js",
@@ -18,9 +18,9 @@
   "author": "fmihel76@gmail.com",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/fmihel/php-router-js/issues"
+    "url": "https://github.com/fmihel/php-router-client/issues"
   },
-  "homepage": "https://github.com/fmihel/php-router-js#readme",
+  "homepage": "https://github.com/fmihel/php-router-client#readme",
   "devDependencies": {
     "@babel/core": "^7.6.2",
     "@babel/preset-env": "^7.6.2",

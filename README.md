@@ -1,2 +1,2 @@
-# php-router-js
+# php-router-client
 client side for php-router
