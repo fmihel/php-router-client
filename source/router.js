@@ -1,11 +1,56 @@
 
 class Router {
     constructor() {
-        this.host = window.location.href;
+        // eslint-disable-next-line no-underscore-dangle
+        this._params = {
+            host: window.location.href,
+            timeout: 2000,
+        };
+
+        // this.host = window.location.href;
+
         this.events = {
             before: [],
             after: [],
         };
+    }
+
+    /**
+     * установка/получение параметра
+     * @param {any}  o
+     *  params(undefined) - return all params
+     *  params(name:string) - return value of params[name]
+     *  params(name:string,value:any) set param name
+     *  params(obj) set obj to params
+     *
+     * @return {any}
+    */
+    params(...a) {
+        // eslint-disable-next-line no-underscore-dangle
+        const p = this._params;
+        if (a.length === 0) {
+            return p;
+        }
+
+        if (a.length === 1) {
+            const t = typeof a[0];
+
+            if (t === 'string') {
+                return a[0] in p ? p[a[0]] : undefined;
+            }
+
+            if (t === 'object') {
+                // eslint-disable-next-line no-underscore-dangle
+                this._params = $.extend(true, p, a[0]);
+            }
+        }
+
+        if (a.length === 2) {
+            p[a[0]] = $.extend(true, p[a[0]], a[1]);
+        }
+
+
+        return undefined;
     }
 
     /** регистрируем события  */
@@ -44,8 +89,10 @@ class Router {
             const p = $.extend(false, {
                 id: -1,
                 data: '',
-                url: this.host,
-                timeout: 2000,
+                // eslint-disable-next-line no-underscore-dangle
+                url: this._params.host,
+                // eslint-disable-next-line no-underscore-dangle
+                timeout: this._params.timeout,
                 method: 'POST',
             }, o);
 
