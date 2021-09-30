@@ -1,9 +1,11 @@
+/* eslint-disable no-underscore-dangle */
 class Router {
     constructor() {
         // eslint-disable-next-line no-underscore-dangle
         this._params = {
             host: window.location.href,
             timeout: 2000,
+            namespace: '',
         };
 
         // this.host = window.location.href;
@@ -86,12 +88,10 @@ class Router {
             const p = $.extend(false, {
                 id: -1,
                 data: '',
-                // eslint-disable-next-line no-underscore-dangle
                 url: this._params.host,
-                // eslint-disable-next-line no-underscore-dangle
                 timeout: this._params.timeout,
                 method: 'POST',
-                namespace: '',
+                namespace: this._params.namespace,
             }, o);
 
             const pack = { fmihel_router_data: { id: p.id, data: p.data, namespace: p.namespace } };
