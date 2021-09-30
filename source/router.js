@@ -1,4 +1,3 @@
-
 class Router {
     constructor() {
         // eslint-disable-next-line no-underscore-dangle
@@ -49,7 +48,6 @@ class Router {
             p[a[0]] = $.extend(true, p[a[0]], a[1]);
         }
 
-
         return undefined;
     }
 
@@ -83,7 +81,6 @@ class Router {
         return result;
     }
 
-
     send(o) {
         return new Promise((ok, err) => {
             const p = $.extend(false, {
@@ -94,10 +91,10 @@ class Router {
                 // eslint-disable-next-line no-underscore-dangle
                 timeout: this._params.timeout,
                 method: 'POST',
+                namespace: '',
             }, o);
 
-            const pack = { fmihel_router_data: { id: p.id, data: p.data } };
-
+            const pack = { fmihel_router_data: { id: p.id, data: p.data, namespace: p.namespace } };
 
             const evResultBefore = this.do('before', pack.fmihel_router_data);
             if (evResultBefore !== true) {
@@ -105,7 +102,6 @@ class Router {
                 err(typeof evResultBefore === 'string' ? { res: -3, msg: evResultBefore } : { res: -3, msg: 'before return false', ...evResultBefore });
                 return;
             }
-
 
             $.ajax({
                 url: p.url,
