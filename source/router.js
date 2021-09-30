@@ -116,7 +116,7 @@ class Router {
                 .done((d) => {
                     let errorMsg = { res: 0, msg: 'system', data: null };
                     try {
-                        const data = $.parseJSON(d);
+                        const data = JSON.parse(d);
                         /** -------------------------------------------------------- */
                         const evResultAfter = this.do('after', ('pack' in data ? data.pack : data));
                         if (evResultAfter !== true) {
