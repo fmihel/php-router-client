@@ -1,3 +1,5 @@
+/* eslint-disable camelcase */
+/* eslint-disable array-callback-return */
 /* eslint-disable max-len */
 /* eslint-disable no-underscore-dangle */
 
@@ -51,60 +53,57 @@ class Router {
             if (this.events[event].indexOf(callback) === -1) {
                 this.events[event].push(callback);
             }
+        } else {
+            throw new Error(`event ${event} no exists in router? use before or after`);
         }
         return this;
     }
 
-    do(event, param) {
-        let result = true;
+    do(event, pack) {
         if (event in this.events) {
-            this.events[event].find((callback) => {
-                try {
-                    const ret = callback(param, event);
-                    if ((ret !== undefined) && (ret !== true)) {
-                        result = ret;
-                        return true;
-                    }
-                } catch (e) {
-                    console.error(e);
-                    result = false;
-                }
-                return true;
+            let out = pack;
+            this.events[event].map((callback) => {
+                out = { ...out, ...callback(pack) };
             });
+            return out;
         }
-        return result;
+        throw new Error(`event ${event} no exists in router? use before or after`);
     }
 
     async send({ to, data = {}, params = {} }) {
         try {
             const update = { ...this._params, ...params };
             const { host, id, ...prms } = update;
+
+            const sendPack = this.do('before', { data, to });
+
             const response = await fetch(
                 host,
                 {
                     ...prms,
-                    body: JSON.stringify({ [id]: { data, to } }),
+                    body: JSON.stringify({ [id]: sendPack }),
                 },
             );
 
-            const pack = await response.json(); // parses JSON response into native JavaScript objects
+            const recvPack = await response.json(); // parses JSON response into native JavaScript objects
 
-            if (!('res' in pack)) {
+            if (!('res' in recvPack)) {
                 throw new Error('неизвестный ответ');
             }
 
-            if (pack.res == 1) {
-                if (!('data' in pack)) {
+            if (recvPack.res == 1) {
+                if (!('data' in recvPack)) {
                     throw new Error('отсутствует data');
                 }
-                return pack.data;
+                this.do('after', recvPack.param);
+                return recvPack.data;
             }
 
-            if (!('msg' in pack)) {
+            if (!('msg' in recvPack)) {
                 throw new Error('ошибка без описания');
             }
 
-            throw new Error(pack.msg);
+            throw new Error(recvPack.msg);
         } catch (e) {
             console.error(e);
             throw e;
