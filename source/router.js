@@ -6,6 +6,7 @@ class Router {
         // eslint-disable-next-line no-underscore-dangle
         this._params = {
             host: './',
+            id: 'router',
             method: 'POST', // *GET, POST, PUT, DELETE, etc.
             mode: 'no-cors', // no-cors, *cors, same-origin
             cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
@@ -76,13 +77,13 @@ class Router {
 
     async send({ to, data = {}, params = {} }) {
         try {
-            const prms = { ...this._params, ...params };
-
+            const update = { ...this._params, ...params };
+            const { host, id, ...prms } = update;
             const response = await fetch(
-                prms.host,
+                host,
                 {
                     ...prms,
-                    body: JSON.stringify({ data, to }),
+                    body: JSON.stringify({ [id]: { data, to } }),
                 },
             );
 
