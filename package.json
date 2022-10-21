@@ -1,8 +1,9 @@
 {
   "name": "fmihel-php-router-client",
-  "version": "2.1.1",
+  "version": "2.1.1-beta.6",
   "description": "client side for php-router",
-  "main": "index.js",
+  "main": "dist/fmihel-router-client.min.js",
+  "types":"source/types.d.ts",
   "scripts": {
     "build": "npm run build-dist && npm run build-dist-min",
     "build-dist": "rollup -c rollup.config.js",
@@ -10,6 +11,7 @@
     "npm-publish-patch": "npm run build && npm version patch && npm publish && npm run git-push",
     "npm-publish-minor": "npm run build && npm version minor && npm publish && npm run git-push",
     "npm-publish-major": "npm run build && npm version major && npm publish && npm run git-push",
+    "npm-publish-beta":  "npm run build && npm publish  --tag beta",
     "git-push": "git push php-router-client && git push php-router-client --tag"
   },
   "repository": {
@@ -41,9 +43,7 @@
     "rollup-plugin-babel": "^4.4.0",
     "rollup-plugin-commonjs": "^10.1.0",
     "rollup-plugin-node-resolve": "^5.2.0",
-    "rollup-plugin-terser": "^5.3.1"
-  },
-  "dependencies": {
-    "jquery": "^3.6.0"
+    "rollup-plugin-terser": "^5.3.1",
+    "rollup": "^1.32.1"
   }
 }

@@ -3,7 +3,7 @@
 /* eslint-disable max-len */
 /* eslint-disable no-underscore-dangle */
 
-class Router {
+export default class Router {
     constructor() {
         // eslint-disable-next-line no-underscore-dangle
         this._params = {
@@ -39,12 +39,12 @@ class Router {
      * @return {any}
     */
     // eslint-disable-next-line consistent-return
-    params(a = undefined) {
+    params(o = undefined) {
         // eslint-disable-next-line no-underscore-dangle
-        if (a === undefined) {
-            return this._params;
+        if (o !== undefined) {
+            this._params = { ...this._params, ...o };
         }
-        this._params = { ...this._params, ...a };
+        return { ...this._params };
     }
 
     /** регистрируем события  */
@@ -91,6 +91,7 @@ class Router {
                 throw new Error('неизвестный ответ');
             }
 
+            // eslint-disable-next-line eqeqeq
             if (recvPack.res == 1) {
                 if (!('data' in recvPack)) {
                     throw new Error('отсутствует data');
@@ -110,6 +111,3 @@ class Router {
         }
     }
 }
-
-const router = new Router();
-export default router;
