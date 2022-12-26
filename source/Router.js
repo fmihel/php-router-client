@@ -7,7 +7,7 @@
 export default class Router {
     constructor() {
         // eslint-disable-next-line no-underscore-dangle
-        this._params = {
+        this.global = {
             host: './',
             id: 'router',
             method: 'POST', // *GET, POST, PUT, DELETE, etc.
@@ -29,23 +29,6 @@ export default class Router {
             before: [],
             after: [],
         };
-    }
-
-    /**
-     * установка/получение параметра
-     * @param {any}  o
-     *  params(undefined) - return all params
-     *  params(obj) set obj to params
-     *
-     * @return {any}
-    */
-    // eslint-disable-next-line consistent-return
-    params(o = undefined) {
-        // eslint-disable-next-line no-underscore-dangle
-        if (o !== undefined) {
-            this._params = { ...this._params, ...o };
-        }
-        return { ...this._params };
     }
 
     /** регистрируем события  */
@@ -72,11 +55,11 @@ export default class Router {
     }
 
     send({ to, data = {}, params = {} }) {
-        const _this = this;
-        const update = { ..._this._params, ...params };
+        const self = this;
+        const update = { ...self.global, ...params };
         const { host, id, ...prms } = update;
 
-        const sendPack = _this.do('before', { data, to });
+        const sendPack = self.do('before', { data, to });
 
         return fetch(
             host,
@@ -96,7 +79,7 @@ export default class Router {
                     if (!('data' in recvPack)) {
                         throw new Error('отсутствует data');
                     }
-                    _this.do('after', recvPack.param);
+                    self.do('after', recvPack.param);
                     return recvPack.data;
                 }
 
