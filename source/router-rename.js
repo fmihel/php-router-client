@@ -1,3 +1,4 @@
+/* eslint-disable eqeqeq */
 /* eslint-disable camelcase */
 /* eslint-disable array-callback-return */
 /* eslint-disable max-len */
@@ -70,6 +71,42 @@ export default class Router {
         throw new Error(`event ${event} no exists in router? use before or after`);
     }
 
+    send({ to, data = {}, params = {} }) {
+        const _this = this;
+        const update = { ..._this._params, ...params };
+        const { host, id, ...prms } = update;
+
+        const sendPack = _this.do('before', { data, to });
+
+        return fetch(
+            host,
+            {
+                ...prms,
+                body: JSON.stringify({ [id]: sendPack }),
+            },
+        )
+            .then((response) => {
+                const recvPack = response.json();
+
+                if (!('res' in recvPack)) {
+                    throw new Error('неизвестный ответ');
+                }
+
+                if (recvPack.res == 1) {
+                    if (!('data' in recvPack)) {
+                        throw new Error('отсутствует data');
+                    }
+                    _this.do('after', recvPack.param);
+                    return recvPack.data;
+                }
+
+                if (!('msg' in recvPack)) {
+                    throw new Error('ошибка без описания');
+                }
+                throw new Error(recvPack.msg);
+            });
+    }
+/*
     async send({ to, data = {}, params = {} }) {
         try {
             const update = { ...this._params, ...params };
@@ -110,4 +147,5 @@ export default class Router {
             throw e;
         }
     }
+    */
 }

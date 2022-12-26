@@ -4,7 +4,7 @@ import babel from 'rollup-plugin-babel';
 import commonJs from 'rollup-plugin-commonjs';
 
 export default {
-    input: './source/index.js',
+    input: './index.js',
     output: {
         file: './dist/fmihel-router-client.js',
         format: 'cjs', // umd cjs iife
