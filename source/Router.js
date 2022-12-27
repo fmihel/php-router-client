@@ -68,9 +68,8 @@ export default class Router {
                 body: JSON.stringify({ [id]: sendPack }),
             },
         )
-            .then((response) => {
-                const recvPack = response.json();
-
+            .then((response) => response.json())
+            .then((recvPack) => {
                 if (!('res' in recvPack)) {
                     throw new Error('неизвестный ответ');
                 }
