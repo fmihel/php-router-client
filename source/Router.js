@@ -43,11 +43,11 @@ export default class Router {
         return this;
     }
 
-    do(event, pack) {
+    do(event, pack, params) {
         if (event in this.events) {
             let out = pack;
             this.events[event].map((callback) => {
-                out = { ...out, ...callback(pack) };
+                out = { ...out, ...callback(pack, params) };
             });
             return out;
         }
@@ -59,7 +59,7 @@ export default class Router {
         const update = { ...self.global, ...params };
         const { host, id, ...prms } = update;
 
-        const sendPack = self.do('before', { data, to });
+        const sendPack = self.do('before', { data, to }, { to });
 
         return fetch(
             host,
@@ -70,22 +70,23 @@ export default class Router {
         )
             .then((response) => response.json())
             .then((recvPack) => {
-                if (!('res' in recvPack)) {
+                const recv = self.do('after', recvPack, { to });
+
+                if (!('res' in recv)) {
                     throw new Error('неизвестный ответ');
                 }
 
-                if (recvPack.res == 1) {
-                    if (!('data' in recvPack)) {
+                if (recv.res == 1) {
+                    if (!('data' in recv)) {
                         throw new Error('отсутствует data');
                     }
-                    self.do('after', recvPack.param);
-                    return recvPack.data;
+                    return recv.data;
                 }
 
-                if (!('msg' in recvPack)) {
+                if (!('msg' in recv)) {
                     throw new Error('ошибка без описания');
                 }
-                throw new Error(recvPack.msg);
+                throw new Error(recv.msg);
             });
     }
 }
