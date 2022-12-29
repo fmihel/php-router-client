@@ -43,11 +43,11 @@ export default class Router {
         return this;
     }
 
-    do(event, pack, params) {
+    do(event, pack) {
         if (event in this.events) {
             let out = pack;
             this.events[event].map((callback) => {
-                out = { ...out, ...callback(pack, params) };
+                out = { ...out, ...callback(pack) };
             });
             return out;
         }
@@ -59,18 +59,18 @@ export default class Router {
         const update = { ...self.global, ...params };
         const { host, id, ...prms } = update;
 
-        const sendPack = self.do('before', { data, to }, { to });
+        const pack = self.do('before', { data, to });
 
         return fetch(
             host,
             {
                 ...prms,
-                body: JSON.stringify({ [id]: sendPack }),
+                body: JSON.stringify({ [id]: pack }),
             },
         )
             .then((response) => response.json())
             .then((recvPack) => {
-                const recv = self.do('after', recvPack, { to });
+                const recv = self.do('after', { ...recvPack, to });
 
                 if (!('res' in recv)) {
                     throw new Error('неизвестный ответ');
