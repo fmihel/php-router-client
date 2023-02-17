@@ -28,6 +28,7 @@ export default class Router {
             before: [],
             after: [],
         };
+        this.plugins = [];
     }
 
     /** регистрируем события  */
@@ -57,8 +58,10 @@ export default class Router {
         const self = this;
         const update = { ...self.global, ...params };
         const { host, id, ...prms } = update;
+        let pack = { data, to };
 
-        const pack = self.do('before', { data, to });
+        pack = self.do('before', pack);
+        pack = self.doPlugins('before',pack);
 
         return fetch(
             host,
@@ -69,7 +72,9 @@ export default class Router {
         )
             .then((response) => response.json())
             .then((recvPack) => {
-                const recv = self.do('after', { ...recvPack, to });
+                let recv = { ...recvPack, to };
+                recv  = self.doPlugins('before',recv);
+                recv = self.do('after', recv);
 
                 if (!('res' in recv)) {
                     throw new Error('неизвестный ответ');
@@ -87,5 +92,23 @@ export default class Router {
                 }
                 throw new Error(recv.msg);
             });
+    }
+
+    addPlugin(plugin){
+        this.plugins.push(plugin);
+    }
+
+    doPlugins(ev,pack){
+        let plugins = ev === 'after'?this.plugins.reverse():this.plugins;
+
+        plugins.map(plugin=>{
+            if (ev === 'before'){
+                pack = plugin.before(pack);
+            }else if (ev === 'before'){
+                pack = plugin.after(pack)
+            };
+        });
+
+        return pack;
     }
 }
