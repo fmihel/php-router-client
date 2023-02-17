@@ -73,7 +73,7 @@ export default class Router {
             .then((response) => response.json())
             .then((recvPack) => {
                 let recv = { ...recvPack, to };
-                recv  = self.doPlugins('before',recv);
+                recv  = self.doPlugins('after',recv);
                 recv = self.do('after', recv);
 
                 if (!('res' in recv)) {
@@ -96,6 +96,7 @@ export default class Router {
 
     addPlugin(plugin){
         this.plugins.push(plugin);
+        return plugin
     }
 
     doPlugins(ev,pack){
@@ -104,7 +105,7 @@ export default class Router {
         plugins.map(plugin=>{
             if (ev === 'before'){
                 pack = plugin.before(pack);
-            }else if (ev === 'before'){
+            }else if (ev === 'after'){
                 pack = plugin.after(pack)
             };
         });
