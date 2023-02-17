@@ -96,7 +96,7 @@ export default class Router {
 
     addPlugin(plugin){
         this.plugins.push(plugin);
-        return plugin
+        return plugin;
     }
 
     doPlugins(ev,pack){
